@@ -39,6 +39,11 @@ A transfer-learning starter using ResNet-18 for experiments on labeled ultrasoun
 - **Technologies:** Python, PyTorch, Torchvision, Scikit-learn
 - **Project folder:** [ultrasound-pcos-detection](projects/ultrasound-pcos-detection/)
 
+### 08. AI Chatbot for Customer Support
+A Streamlit FAQ chatbot that retrieves answers from a small knowledge base using TF-IDF similarity and falls back when it cannot find a relevant answer.
+- **Technologies:** Python, Streamlit, Scikit-learn, TF-IDF
+- **Project folder:** [ai-customer-support-chatbot](projects/ai-customer-support-chatbot/)
+
 ## About this portfolio
 
 The goal is to demonstrate practical problem-solving, reproducible experiments, clear documentation, and responsible use of AI. Projects are works in progress; results and limitations should be reviewed in each project's documentation.
