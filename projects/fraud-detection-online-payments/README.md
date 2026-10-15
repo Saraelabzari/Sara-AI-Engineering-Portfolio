@@ -1,50 +1,65 @@
 # Fraud Detection for Online Payments
 
-A machine-learning starter project for classifying potentially fraudulent payment transactions. The pipeline emphasizes class imbalance, reproducible evaluation, and avoiding data leakage.
+A reproducible machine-learning project for identifying potentially fraudulent transactions in a highly imbalanced dataset. It includes a majority-class baseline, a class-weighted Random Forest pipeline, precision-recall evaluation, model export, and unit tests.
 
-> **Status:** Starter implementation. Run the script on the public dataset to produce real metrics before describing performance in a CV or interview.
+> **Status:** Full starter code and tests have been added. The real public dataset has not yet been used to run the training pipeline, so this repository does not claim a specific model score.
 
-## Objectives
+## Features
 
-- Explore a labeled transaction dataset.
-- Compare a majority-class baseline with a balanced Random Forest classifier.
-- Evaluate fraud detection using precision, recall, F1-score, PR-AUC, and a confusion matrix.
-- Save a trained model for later experimentation.
-- Discuss false positives and false negatives in the context of payment review.
+- Validates the expected `Class` target column (1 = fraud, 0 = legitimate)
+- Handles missing numeric feature values with median imputation inside the pipeline
+- Uses a stratified train/test split
+- Compares a majority-class baseline with a class-weighted Random Forest
+- Reports precision, recall, F1, average precision, ROC-AUC, and a classification report
+- Saves a confusion matrix, precision-recall curve, trained model, and JSON metrics
+- Includes synthetic-data unit tests that don't need the full dataset
 
 ## Dataset
 
-This project is configured for the public European credit-card fraud dataset commonly distributed as `creditcard.csv`. It includes anonymized transaction features, `Time`, `Amount`, and `Class` (1 = fraud, 0 = legitimate). Obtain it from a trusted, properly licensed source and place it at `data/creditcard.csv`. The dataset is highly imbalanced, so accuracy alone is misleading.
+This project expects the public European credit-card fraud dataset commonly distributed as `creditcard.csv`, with numeric feature columns and a `Class` target. Obtain the file from a trusted source under its applicable terms and place it here:
 
-## Project structure
+`data/creditcard.csv`
 
-```text
-fraud-detection-online-payments/
-├── data/                  # local dataset, not committed
-├── src/train.py
-├── requirements.txt
-├── .gitignore
-└── README.md
-```
+The dataset is highly imbalanced. Accuracy alone can look excellent even when a model detects few or no fraudulent transactions. Do not commit the dataset to GitHub.
 
-## Run locally
+## Setup — Windows
+
+From this project directory:
 
 ```bash
 python -m venv .venv
-# Windows: .venv\\Scripts\\activate
-# macOS/Linux: source .venv/bin/activate
+.venv\\Scripts\\activate
+python -m pip install --upgrade pip
 pip install -r requirements.txt
+pip install -r requirements-dev.txt
+```
+
+## Train
+
+```bash
 python src/train.py --data data/creditcard.csv
 ```
 
-## Metrics to review
+Optional: reduce the number of trees for a quicker development run:
 
-- **Precision:** How many flagged transactions were actually fraudulent?
-- **Recall:** How many fraudulent transactions were detected?
-- **F1-score:** Balance of precision and recall.
-- **Average precision / PR-AUC:** Especially useful when fraud is rare.
-- **Confusion matrix:** Shows false positives and missed fraud.
+```bash
+python src/train.py --data data/creditcard.csv --estimators 30
+```
+
+Generated outputs include `reports/confusion_matrix.png`, `reports/precision_recall_curve.png`, `models/fraud_classifier.joblib`, and `models/metrics.json`. These files are generated locally and excluded from Git.
+
+## Run tests
+
+```bash
+python -m pytest tests/
+```
+
+The tests use a small synthetic dataset and do not require the full credit-card dataset. They have been added but still need to be executed locally.
+
+## Tech stack
+
+Python, pandas, scikit-learn, Matplotlib, joblib, pytest.
 
 ## Responsible use
 
-This model is a prototype for analyst decision support, not an automatic final decision system. Evaluate thresholds, operational costs, data drift, and fairness before any real deployment. Never use this repository to process real payment-card data or credentials.
+This is a decision-support prototype, not a production payment-blocking system. Choose thresholds based on the costs of false positives and missed fraud, validate against time-based splits when appropriate, monitor data drift, and provide human review for consequential decisions. Never put real card numbers, customer records, API keys, or credentials in this repository.
