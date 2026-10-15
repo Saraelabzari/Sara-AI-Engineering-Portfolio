@@ -19,6 +19,11 @@ A reproducible classification pipeline for identifying customers at risk of leav
 - **Technologies:** Python, Pandas, Scikit-learn, Matplotlib
 - **Project folder:** [customer-churn-prediction](projects/customer-churn-prediction/)
 
+### 04. Face Detection Home Security System
+A local webcam computer-vision prototype using OpenCV's Haar cascade detector to display live face bounding boxes and counts. No identity recognition or recording.
+- **Technologies:** Python, OpenCV
+- **Project folder:** [face-detection-home-security](projects/face-detection-home-security/)
+
 ## About this portfolio
 
 The goal is to demonstrate practical problem-solving, reproducible experiments, clear documentation, and responsible use of AI. Projects are works in progress; results and limitations should be reviewed in each project's documentation.
