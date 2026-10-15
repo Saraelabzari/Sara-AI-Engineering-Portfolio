@@ -1,51 +1,66 @@
-# Ultrasound-Based PCOS Detection — Deep Learning
+# Ultrasound Image Classification Research Prototype
 
-A research-oriented computer-vision project template for investigating whether deep-learning models can classify ultrasound images into dataset-provided categories.
+A deep-learning image-classification starter built with PyTorch and a pretrained ResNet-18. The pipeline expects dataset-provided class labels and reports experimental validation metrics.
 
-> **Important status and medical limitation:** This is a starter project, not a validated diagnostic tool. No ultrasound dataset has been included, and no model performance has been measured. PCOS is a clinical condition and should not be diagnosed from an experimental image classifier alone. The project must not be used to make clinical decisions.
+> **Medical limitation:** This is not a validated diagnostic tool. It does not establish PCOS status, provide medical advice, or support clinical decisions. No dataset has been included and no real-dataset performance has been measured.
 
-## Goals
+## Features
 
-- Establish a reproducible image classification workflow.
-- Keep patient data private and use only appropriately licensed, de-identified images.
-- Compare a pretrained image model with a simple baseline.
-- Evaluate per-class precision, recall, macro F1, confusion matrix, and calibration.
-- Document dataset limitations, possible bias, and the difference between research classification and clinical diagnosis.
+- Validates a folder-per-class image dataset
+- Resizes images and converts grayscale images to three channels
+- Transfer learning using ResNet-18
+- Training loop with AdamW and cross-entropy loss
+- Classification report, accuracy, macro F1, and confusion matrix
+- Saves a model checkpoint with class names
+- Unit tests for dataset validation
 
-## Dataset format
+## Dataset layout
 
-The training script expects a folder layout with one subfolder per class:
+Use only appropriately licensed and de-identified data with clear label definitions:
 
 ```text
 data/ultrasound/
-├── class_a/
+├── dataset_label_a/
 │   ├── image_001.png
 │   └── image_002.png
-└── class_b/
+└── dataset_label_b/
     ├── image_003.png
     └── image_004.png
 ```
 
-Replace the example class names with labels explicitly defined by the dataset's documentation. Do not assume ultrasound images alone establish PCOS status. Use only data with a clear legal/ethical basis and suitable consent or authorization.
+The class folder names must reflect the dataset's documented labels. Do not assume an ultrasound image alone confirms PCOS or another diagnosis. The dataset is not included in this repository.
 
-## Run
+## Install — Windows
 
 ```bash
 python -m venv .venv
-# Windows: .venv\\Scripts\\activate
-# macOS/Linux: source .venv/bin/activate
+.venv\\Scripts\\activate
+python -m pip install --upgrade pip
 pip install -r requirements.txt
-python src/train.py --data data/ultrasound
+pip install -r requirements-dev.txt
 ```
 
-## Method
+The pretrained ResNet-18 weights may be downloaded by torchvision on first use. This requires internet access unless the weights are already cached.
 
-The starter uses transfer learning with a pretrained ResNet-18, a held-out split, class-aware sampling, and basic metrics. A real research study should prefer patient-level separation to avoid images from the same patient appearing in both training and test sets.
+## Train
 
-## Responsible research checklist
+```bash
+python src/train.py --data data/ultrasound --epochs 5 --batch-size 16
+```
 
-- Verify provenance, label definitions, sample size, and class balance.
-- Split by patient, not by image, whenever multiple images per patient exist.
-- Keep an untouched test set and report confidence intervals where possible.
-- Compare performance across clinically relevant subgroups when ethically and statistically appropriate.
-- Do not present model scores as a diagnosis, screening recommendation, or substitute for a qualified clinician.
+Outputs are saved locally to `reports/confusion_matrix.png` and `models/resnet18_classifier.pt`; these folders are excluded from Git.
+
+## Tests
+
+```bash
+python -m pytest tests/
+```
+
+The tests generate temporary sample images and do not require a clinical dataset. They have been added but not yet executed in this environment.
+
+## Important research limitations
+
+- The current split is image-level, not patient-level. If multiple images come from one patient, a patient-level split is essential to reduce leakage.
+- A small or unrepresentative dataset can produce misleading results.
+- Report uncertainty and assess class balance, subgroup performance, calibration, and external validation before drawing research conclusions.
+- Never present this experimental model as a diagnosis or substitute for a qualified clinician.
