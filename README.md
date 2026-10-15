@@ -59,6 +59,11 @@ An interactive Streamlit app for comparing Logistic Regression, Random Forest, a
 - **Technologies:** Python, Pandas, Scikit-learn, Streamlit, Matplotlib
 - **Project folder:** [ml-model-comparison-dashboard](projects/ml-model-comparison-dashboard/)
 
+### 12. Smart Home Voice Assistant
+A local voice-assistant prototype that recognizes spoken commands, responds with text-to-speech, and simulates simple smart-home actions.
+- **Technologies:** Python, SpeechRecognition, pyttsx3
+- **Project folder:** [smart-home-voice-assistant](projects/smart-home-voice-assistant/)
+
 ## About this portfolio
 
 The goal is to demonstrate practical problem-solving, reproducible experiments, clear documentation, and responsible use of AI. Projects are works in progress; results and limitations should be reviewed in each project's documentation.
