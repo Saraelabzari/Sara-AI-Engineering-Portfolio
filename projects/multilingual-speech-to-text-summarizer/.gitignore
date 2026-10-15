@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.streamlit/secrets.toml
+.cache/
+models/
+*.pt
+*.pth
+*.bin
+*.safetensors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
