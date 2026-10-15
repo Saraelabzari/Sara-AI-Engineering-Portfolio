@@ -16,6 +16,7 @@ from torch import nn
 from torch.utils.data import DataLoader, random_split
 from torchvision import datasets, models, transforms
 from sklearn.metrics import classification_report, ConfusionMatrixDisplay
+from pcos_model import build_resnet18, validate_dataset_dir
 
 
 def main() -> None:
@@ -30,10 +31,7 @@ def main() -> None:
 
     if args.epochs < 1 or args.batch_size < 1:
         parser.error("--epochs and --batch-size must be positive")
-    if not args.data.exists():
-        raise FileNotFoundError(
-            f"Dataset directory not found: {args.data}. See README.md for the expected folder layout."
-        )
+    validate_dataset_dir(args.data)
 
     transform = transforms.Compose([
         transforms.Resize((224, 224)),
@@ -56,9 +54,7 @@ def main() -> None:
 
     # Weights are fetched by torchvision if not already cached. For offline use,
     # provide the weights locally or adapt this to a fully offline workflow.
-    weights = models.ResNet18_Weights.DEFAULT
-    model = models.resnet18(weights=weights)
-    model.fc = nn.Linear(model.fc.in_features, len(dataset.classes))
+    model = build_resnet18(num_classes=len(dataset.classes), pretrained=True)
     model.to(device)
 
     criterion = nn.CrossEntropyLoss()
@@ -87,6 +83,8 @@ def main() -> None:
 
     names = [str(name) for name in dataset.classes]
     print(classification_report(all_labels, all_preds, labels=list(range(len(names))), target_names=names, zero_division=0))
+    print("Validation accuracy:", round(accuracy_score(all_labels, all_preds), 4))
+    print("Validation macro F1:", round(f1_score(all_labels, all_preds, average="macro", zero_division=0), 4))
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
     args.model_dir.mkdir(parents=True, exist_ok=True)
