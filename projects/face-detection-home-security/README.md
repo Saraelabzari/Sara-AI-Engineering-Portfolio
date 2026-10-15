@@ -1,58 +1,71 @@
-# Face Detection Home Security System
+# Face Detection Home Security Demo
 
-A privacy-conscious computer-vision prototype that detects faces from a **local webcam** using OpenCV. It draws bounding boxes and shows a live face count.
-
-> **Status:** Starter implementation. The code has been added to this portfolio but has not yet been tested with a webcam. This is a face **detection** demo, not a facial-recognition or identity-verification system.
+A local computer-vision prototype that detects face-like regions in webcam frames using OpenCV's Haar cascade classifier. It is a detection demo, **not a person-identification or access-control system**.
 
 ## Features
 
-- Live webcam capture
-- Face detection with OpenCV's pretrained Haar cascade
-- Bounding boxes and face count overlay
-- Keyboard controls: press `q` or `Esc` to exit
-- No face images saved, no cloud upload, no identification
+- Live webcam preview
+- Adjustable detection parameters through command-line options
+- Bounding-box overlays and a detected-face count
+- Reusable detection and annotation functions
+- Unit tests that do not require a webcam
+- No image saving or recording by default
 
-## Project structure
+## Requirements
 
-```text
-face-detection-home-security/
-├── src/
-│   └── detect_faces.py
-├── requirements.txt
-├── .gitignore
-└── README.md
-```
+- Python 3.10+
+- Webcam (for the live demo)
+- Windows, macOS, or Linux with camera permissions
 
-## Quick start
+## Install
 
-Use Python 3.10+ and a computer with a webcam.
+From this project directory:
 
 ```bash
 python -m venv .venv
-# Windows: .venv\Scripts\activate
-# macOS/Linux: source .venv/bin/activate
+# Windows:
+.venv\\Scripts\\activate
+# macOS/Linux:
+# source .venv/bin/activate
+python -m pip install --upgrade pip
 pip install -r requirements.txt
+pip install -r requirements-dev.txt
+```
+
+## Run
+
+```bash
 python src/detect_faces.py
 ```
 
-For another camera index:
+Press **Q** or **Esc** to quit. If your webcam is not camera index 0, try:
 
 ```bash
 python src/detect_faces.py --camera 1
 ```
 
+Tune the detector if needed:
+
+```bash
+python src/detect_faces.py --scale-factor 1.15 --min-neighbors 6 --min-width 40 --min-height 40
+```
+
+## Tests
+
+```bash
+python -m pytest tests/
+```
+
+The tests check cascade loading, empty-frame handling, output structure, and annotation behavior. They have been added to the repository but still need to be run locally.
+
 ## How it works
 
-1. Open the local webcam.
-2. Convert frames to grayscale.
-3. Run OpenCV's built-in frontal-face Haar cascade detector.
-4. Draw bounding boxes around detected faces.
-5. Display the annotated live feed without saving video or images.
+1. OpenCV reads frames from the selected camera.
+2. Each frame is converted to grayscale and histogram-equalized.
+3. A pretrained Haar cascade proposes face-like regions.
+4. Rectangles and a count are drawn on a copy of the frame.
+5. The frame is displayed locally until the user exits.
 
-## Limitations and next steps
+## Limitations and privacy
 
-Haar cascades may miss faces under poor lighting, occlusion, or non-frontal angles and may produce false positives. The system does not determine whether someone is authorized or whether an intrusion occurred. Future extensions could include an optional, consent-based alert mechanism, evaluation on varied lighting conditions, and a modern face detector.
-
-## Privacy and safety
-
-Only use cameras in spaces where you have permission to record or monitor. This starter implementation processes video locally and does not store frames.
+Haar cascades can miss faces or produce false detections depending on lighting, pose, occlusion, and camera quality. Detection does not establish a person's identity. The demo does not record frames or control locks. Obtain consent before using a camera around people, and do not use this prototype as the sole basis for security decisions.
