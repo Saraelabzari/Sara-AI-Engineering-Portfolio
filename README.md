@@ -24,6 +24,11 @@ A local webcam computer-vision prototype using OpenCV's Haar cascade detector to
 - **Technologies:** Python, OpenCV
 - **Project folder:** [face-detection-home-security](projects/face-detection-home-security/)
 
+### 05. Fraud Detection for Online Payments
+A class-imbalance-aware machine-learning pipeline that compares a majority-class baseline with a balanced Random Forest and reports precision, recall, F1-score, average precision, and evaluation plots.
+- **Technologies:** Python, Pandas, Scikit-learn, Matplotlib
+- **Project folder:** [fraud-detection-online-payments](projects/fraud-detection-online-payments/)
+
 ## About this portfolio
 
 The goal is to demonstrate practical problem-solving, reproducible experiments, clear documentation, and responsible use of AI. Projects are works in progress; results and limitations should be reviewed in each project's documentation.
