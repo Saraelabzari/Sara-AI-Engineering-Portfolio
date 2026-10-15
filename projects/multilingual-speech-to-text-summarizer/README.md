@@ -22,6 +22,17 @@ streamlit run app.py
 ```
 Install FFmpeg from https://ffmpeg.org/download.html and ensure `ffmpeg -version` works.
 
+## Run unit tests
+
+Install the development dependencies and run the lightweight helper tests:
+
+```bash
+pip install -r requirements-dev.txt
+python -m pytest tests/
+```
+
+The tests use a fake summarizer for unit tests and do not download model weights. The full app has not yet been validated end-to-end on all operating systems.
+
 ## Models
 - Whisper: speech recognition and optional translation to English.
 - `csebuetnlp/mT5_multilingual_XLSum`: multilingual summarization model.
