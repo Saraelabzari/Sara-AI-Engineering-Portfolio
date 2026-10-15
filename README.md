@@ -44,6 +44,11 @@ A Streamlit FAQ chatbot that retrieves answers from a small knowledge base using
 - **Technologies:** Python, Streamlit, Scikit-learn, TF-IDF
 - **Project folder:** [ai-customer-support-chatbot](projects/ai-customer-support-chatbot/)
 
+### 09. ID Document Recognition System
+A local OCR prototype that preprocesses document images and extracts text with Tesseract, with a Streamlit interface and privacy-focused usage guidance.
+- **Technologies:** Python, OpenCV, Tesseract OCR, Streamlit
+- **Project folder:** [id-document-recognition](projects/id-document-recognition/)
+
 ## About this portfolio
 
 The goal is to demonstrate practical problem-solving, reproducible experiments, clear documentation, and responsible use of AI. Projects are works in progress; results and limitations should be reviewed in each project's documentation.
