@@ -1,67 +1,71 @@
-"""Content-based product recommendation demo using TF-IDF."""
-from __future__ import annotations
-
+"""Streamlit UI for a content-based product recommendation demo."""
 from pathlib import Path
 
 import pandas as pd
 import streamlit as st
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
+
+from src.recommender import ProductRecommender, validate_products
 
 DATA_PATH = Path(__file__).resolve().parent / "products.csv"
 
 
-def recommend_products(products: pd.DataFrame, product_id: str, top_n: int = 5) -> pd.DataFrame:
-    required = {"product_id", "title", "category", "description"}
-    if not required.issubset(products.columns):
-        raise ValueError(f"Products CSV must contain columns: {sorted(required)}")
-    if products["product_id"].duplicated().any():
-        raise ValueError("product_id values must be unique.")
-    if top_n < 1:
-        raise ValueError("top_n must be at least 1.")
-    matches = products.index[products["product_id"].astype(str) == str(product_id)].tolist()
-    if not matches:
-        raise ValueError(f"Unknown product_id: {product_id}")
+@st.cache_data
+def load_catalog(path: str) -> pd.DataFrame:
+    return validate_products(pd.read_csv(path))
 
-    text = (
-        products["title"].fillna("") + " " +
-        products["category"].fillna("") + " " +
-        products["description"].fillna("")
-    )
-    matrix = TfidfVectorizer(stop_words="english", ngram_range=(1, 2)).fit_transform(text)
-    selected_index = matches[0]
-    scores = cosine_similarity(matrix[selected_index], matrix).ravel()
-    ranked = scores.argsort()[::-1]
-    ranked = [idx for idx in ranked if idx != selected_index][:top_n]
-    result = products.iloc[ranked].copy()
-    result["similarity"] = scores[ranked]
-    return result.reset_index(drop=True)
+
+@st.cache_resource
+def build_recommender(products: pd.DataFrame) -> ProductRecommender:
+    return ProductRecommender(products)
 
 
 def main() -> None:
     st.set_page_config(page_title="Product Recommendation Engine", page_icon="🛍️")
     st.title("Product Recommendation Engine")
-    st.caption("Content-based recommendations using product text.")
-    products = pd.read_csv(DATA_PATH)
+    st.caption("Content-based recommendations using product text features.")
+
+    try:
+        products = load_catalog(str(DATA_PATH))
+        recommender = build_recommender(products)
+    except (OSError, ValueError, pd.errors.ParserError) as exc:
+        st.error(f"Could not load the product catalog: {exc}")
+        st.stop()
+
+    options = products["product_id"].tolist()
     selected_id = st.selectbox(
         "Choose a product",
-        products["product_id"].astype(str).tolist(),
+        options,
         format_func=lambda pid: products.loc[
-            products["product_id"].astype(str) == pid, "title"
+            products["product_id"] == pid, "title"
         ].iloc[0],
     )
-    top_n = st.slider("Number of recommendations", min_value=1, max_value=8, value=5)
-    if st.button("Recommend similar products"):
-        selected = products.loc[products["product_id"].astype(str) == selected_id].iloc[0]
+    top_n = st.slider(
+        "Number of recommendations", min_value=1,
+        max_value=max(1, min(8, len(products) - 1)), value=min(5, max(1, len(products) - 1))
+    )
+    categories = ["Any category"] + sorted(
+        category for category in products["category"].unique() if category
+    )
+    category_choice = st.selectbox("Optional category filter", categories)
+
+    if st.button("Recommend similar products", type="primary"):
+        selected = products.loc[products["product_id"] == selected_id].iloc[0]
         st.subheader(f"Selected: {selected['title']}")
-        results = recommend_products(products, selected_id, top_n)
+        category = None if category_choice == "Any category" else category_choice
+        results = recommender.recommend(selected_id, top_n=top_n, category=category)
         if results.empty:
-            st.info("No similar products were found.")
+            st.info("No other products match the selected category.")
         else:
             for row in results.itertuples(index=False):
-                st.markdown(f"**{row.title}** · {row.category}")
-                st.write(row.description)
-                st.caption(f"Text similarity: {row.similarity:.2f}")
+                with st.container(border=True):
+                    st.markdown(f"**{row.title}**")
+                    st.caption(f"{row.category} · Product ID: {row.product_id}")
+                    st.write(row.description)
+                    st.progress(min(1.0, max(0.0, float(row.similarity))))
+                    st.caption(
+                        f"Text similarity: {row.similarity:.3f} "
+                        "(a ranking score, not a purchase probability)"
+                    )
 
 
 if __name__ == "__main__":
