@@ -74,6 +74,11 @@ A class-imbalance-aware fraud detection pipeline with a majority-class baseline,
 - **Technologies:** Python, pandas, scikit-learn, Matplotlib
 - **Project folder:** [fraud-detection-online-payments](projects/fraud-detection-online-payments/)
 
+### 06. Emotion Detection from Voice
+A speech-emotion research prototype using MFCC acoustic features and a Random Forest baseline, with manifest validation, evaluation, model export, and unit tests.
+- **Technologies:** Python, librosa, scikit-learn, NumPy
+- **Project folder:** [emotion-detection-from-voice](projects/emotion-detection-from-voice/)
+
 ## About this portfolio
 
 The goal is to demonstrate practical problem-solving, reproducible experiments, clear documentation, and responsible use of AI. Projects are works in progress; results and limitations should be reviewed in each project's documentation.
