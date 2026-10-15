@@ -39,61 +39,9 @@ def load_whisper(name):
 def load_summarizer():
     return pipeline("text2text-generation", model=SUMMARY_MODEL, tokenizer=SUMMARY_MODEL)
 
-def timestamp(seconds):
-    seconds = max(0, int(seconds))
-    h, rem = divmod(seconds, 3600)
-    m, s = divmod(rem, 60)
-    return f"{h:02d}:{m:02d}:{s:02d}"
+from src.audio_utils import make_transcript, timestamp
+from src.summarization import summarize_text as summarize
 
-def make_transcript(result, include_timestamps=True):
-    segments = result.get("segments") or []
-    if not include_timestamps or not segments:
-        return (result.get("text") or "").strip()
-    lines = []
-    for seg in segments:
-        text = (seg.get("text") or "").strip()
-        if text:
-            lines.append(f"[{timestamp(seg.get('start', 0))}–{timestamp(seg.get('end', 0))}] {text}")
-    return "\n".join(lines) or (result.get("text") or "").strip()
-
-def split_text(text, max_chars=2200):
-    text = " ".join(text.split())
-    if not text:
-        return []
-    if len(text) <= max_chars:
-        return [text]
-    sentences = text.replace("؟", "؟|").replace("!", "!|").replace("?", "?|").replace(".", ".|").split("|")
-    chunks, current = [], ""
-    for sentence in sentences:
-        sentence = sentence.strip()
-        if not sentence:
-            continue
-        if len(sentence) > max_chars:
-            if current:
-                chunks.append(current)
-                current = ""
-            chunks.extend(sentence[i:i + max_chars] for i in range(0, len(sentence), max_chars))
-        elif len(current) + len(sentence) + 1 > max_chars:
-            if current:
-                chunks.append(current)
-            current = sentence
-        else:
-            current = f"{current} {sentence}".strip()
-    if current:
-        chunks.append(current)
-    return chunks
-
-def summarize(text, summarizer, max_tokens=120):
-    summaries = []
-    for chunk in split_text(text):
-        out = summarizer(chunk, max_new_tokens=max_tokens, min_length=min(20, max(5, max_tokens // 4)),
-                         do_sample=False, truncation=True)
-        summaries.append(out[0]["generated_text"].strip())
-    combined = " ".join(summaries)
-    if len(summaries) > 1 and len(combined) > 500:
-        out = summarizer(combined[:5000], max_new_tokens=max_tokens, do_sample=False, truncation=True)
-        return out[0]["generated_text"].strip()
-    return combined
 
 def heuristic_action_items(text):
     cues = ("action:", "to do:", "todo:", "follow up", "follow-up", "need to", "must ", "should ")
