@@ -79,6 +79,11 @@ A speech-emotion research prototype using MFCC acoustic features and a Random Fo
 - **Technologies:** Python, librosa, scikit-learn, NumPy
 - **Project folder:** [emotion-detection-from-voice](projects/emotion-detection-from-voice/)
 
+### 07. Ultrasound Image Classification Research Prototype
+A PyTorch ResNet-18 transfer-learning pipeline for dataset-labeled ultrasound image classification, with validation metrics, model checkpoints, and dataset checks. Research prototype only; not a diagnostic tool.
+- **Technologies:** Python, PyTorch, torchvision, scikit-learn
+- **Project folder:** [ultrasound-pcos-detection](projects/ultrasound-pcos-detection/)
+
 ## About this portfolio
 
 The goal is to demonstrate practical problem-solving, reproducible experiments, clear documentation, and responsible use of AI. Projects are works in progress; results and limitations should be reviewed in each project's documentation.
