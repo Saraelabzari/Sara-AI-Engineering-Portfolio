@@ -21,6 +21,8 @@ This repository is a work in progress. Each project folder contains its own sour
 | 11 | [ML Model Comparison Dashboard](projects/ml-model-comparison-dashboard/) | Classification baseline comparison and metrics | Streamlit, scikit-learn, Matplotlib |
 | 12 | [Smart Home Voice Assistant](projects/smart-home-voice-assistant/) | Voice commands and simulated device state | SpeechRecognition, pyttsx3 |
 
+| 13 | [Image Classification Pipeline (ML + Deep Learning)](projects/image-classification-pipeline/) | Folder-based transfer learning with ResNet-18 | PyTorch, Torchvision, Pillow |
+
 ## Engineering practices
 
 - Reusable modules separated from application interfaces
