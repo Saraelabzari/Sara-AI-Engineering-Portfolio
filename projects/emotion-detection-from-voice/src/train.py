@@ -1,97 +1,60 @@
-"""Train a baseline speech-emotion classifier from a CSV manifest.
-
-Manifest columns:
-  path  - audio file path (relative to manifest folder or absolute)
-  label - emotion category
-
-Example:
-  python src/train.py --manifest data/labels.csv
-"""
+"""Train a baseline emotion classifier from a local audio manifest."""
 from __future__ import annotations
 
 import argparse
 from pathlib import Path
 
-import librosa
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
+from joblib import dump
 from sklearn.metrics import ConfusionMatrixDisplay, classification_report, f1_score
 from sklearn.model_selection import train_test_split
-from sklearn.pipeline import make_pipeline
-from sklearn.impute import SimpleImputer
 
-
-def extract_features(audio_path: Path, sample_rate: int = 22050) -> np.ndarray:
-    """Extract mean and standard deviation of MFCCs from one audio file."""
-    signal, sr = librosa.load(audio_path, sr=sample_rate, mono=True)
-    if signal.size == 0:
-        raise ValueError(f"Audio file is empty: {audio_path}")
-    mfcc = librosa.feature.mfcc(y=signal, sr=sr, n_mfcc=20)
-    return np.concatenate([mfcc.mean(axis=1), mfcc.std(axis=1)])
+from emotion_model import build_classifier, extract_features, load_manifest, resolve_audio_path
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description="Train speech emotion recognition baseline.")
     parser.add_argument("--manifest", type=Path, default=Path("data/labels.csv"))
     parser.add_argument("--output-dir", type=Path, default=Path("reports"))
     parser.add_argument("--model-dir", type=Path, default=Path("models"))
+    parser.add_argument("--trees", type=int, default=300)
     args = parser.parse_args()
 
-    if not args.manifest.exists():
-        raise FileNotFoundError(f"Manifest not found: {args.manifest}")
-
-    manifest = pd.read_csv(args.manifest)
-    if not {"path", "label"}.issubset(manifest.columns):
-        raise ValueError("Manifest must include 'path' and 'label' columns.")
-    manifest = manifest.dropna(subset=["path", "label"])
-    if manifest["label"].nunique() < 2:
-        raise ValueError("At least two distinct emotion labels are required.")
-
-    base = args.manifest.parent
-    features, labels, kept = [], [], []
+    manifest = load_manifest(args.manifest)
+    features, labels = [], []
     for row in manifest.itertuples(index=False):
-        audio_path = Path(str(row.path))
-        if not audio_path.is_absolute():
-            audio_path = base / audio_path
-        if not audio_path.exists():
-            print(f"Skipping missing audio file: {audio_path}")
-            continue
+        audio_path = resolve_audio_path(row.path, args.manifest.parent)
         try:
             features.append(extract_features(audio_path))
-            labels.append(str(row.label))
-            kept.append(str(audio_path))
-        except Exception as exc:
-            print(f"Skipping unreadable audio file {audio_path}: {exc}")
-
+            labels.append(row.label)
+        except (OSError, ValueError, RuntimeError) as exc:
+            print(f"Skipping {audio_path}: {exc}")
     if len(features) < 4 or len(set(labels)) < 2:
-        raise ValueError("Not enough valid audio samples across at least two labels.")
+        raise ValueError("Not enough readable audio files across at least two labels.")
+    counts = pd.Series(labels).value_counts()
+    if counts.min() < 2:
+        raise ValueError("Each emotion label needs at least two readable examples for stratified splitting.")
 
     X = np.vstack(features)
     y = np.asarray(labels)
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.25, random_state=42, stratify=y
     )
-    model = make_pipeline(
-        SimpleImputer(strategy="median"),
-        RandomForestClassifier(n_estimators=300, class_weight="balanced", random_state=42)
-    )
+    model = build_classifier(n_estimators=args.trees)
     model.fit(X_train, y_train)
-    pred = model.predict(X_test)
-    print(classification_report(y_test, pred, zero_division=0))
-    print(f"Macro F1: {f1_score(y_test, pred, average='macro'):.4f}")
+    prediction = model.predict(X_test)
+    print(classification_report(y_test, prediction, zero_division=0))
+    print(f"Macro F1: {f1_score(y_test, prediction, average='macro'):.4f}")
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
     args.model_dir.mkdir(parents=True, exist_ok=True)
-    ConfusionMatrixDisplay.from_predictions(y_test, pred, xticks_rotation="vertical")
+    ConfusionMatrixDisplay.from_predictions(y_test, prediction, xticks_rotation="vertical")
     plt.title("Speech Emotion Recognition — Confusion Matrix")
     plt.tight_layout()
     plt.savefig(args.output_dir / "confusion_matrix.png", dpi=160)
     plt.close()
-
-    # Persist the pipeline and the label classes learned by the classifier.
-    from joblib import dump
     dump(model, args.model_dir / "emotion_classifier.joblib")
     print(f"Saved confusion matrix to {args.output_dir / 'confusion_matrix.png'}")
     print(f"Saved model to {args.model_dir / 'emotion_classifier.joblib'}")
