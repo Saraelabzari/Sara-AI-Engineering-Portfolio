@@ -1,64 +1,74 @@
 # Customer Churn Prediction
 
-A machine-learning project to identify customers who may leave a subscription-based service. The goal is to support retention teams with risk scores and interpretable model evaluation.
+A reproducible machine-learning pipeline for predicting whether a subscription customer is likely to churn. It includes preprocessing, a Logistic Regression baseline, held-out evaluation, saved model artifacts, and unit tests.
 
-## Project status
+> **Status:** Code and tests have been added to the portfolio repository. The pipeline has not yet been run against the full IBM dataset, so no performance result is claimed.
 
-**Starter implementation / in progress.** This repository contains the project plan and training script structure. Results should only be reported after running the pipeline on the dataset.
+## Features
 
-## Objectives
-
-- Explore customer demographics, account details, service usage, and churn labels.
-- Build a reproducible preprocessing and classification pipeline.
-- Compare a simple baseline with a tree-based model.
-- Evaluate using precision, recall, F1-score, ROC-AUC, and a confusion matrix.
-- Review feature importance to help explain predictions.
-
-## Dataset
-
-Use the public **IBM Telco Customer Churn** dataset. Download the CSV from a trusted source and place it at `data/WA_Fn-UseC_-Telco-Customer-Churn.csv`. Do not commit private customer information or data that you are not licensed to share.
-
-Expected target column: `Churn`.
+- Loads and validates the IBM Telco Customer Churn CSV
+- Converts `TotalCharges` to numeric values and handles missing values in the preprocessing pipeline
+- Excludes customer identifiers from model features
+- Uses stratified train/test splitting and preprocessing fitted only on training data
+- Reports accuracy, precision, recall, F1-score, ROC-AUC, and a classification report
+- Saves the trained model, metrics JSON, and confusion-matrix image
 
 ## Project structure
 
 ```text
 customer-churn-prediction/
-├── data/                 # Add dataset locally; not committed
+├── data/                  # Local dataset; excluded from Git
+├── reports/               # Generated model and metrics; excluded from Git
 ├── src/
-│   └── train.py           # Preprocessing, training and evaluation
+│   ├── churn_model.py     # Reusable preprocessing, training utilities, evaluation
+│   └── train.py           # Command-line training entry point
+├── tests/
+│   └── test_churn_model.py
 ├── requirements.txt
-├── .gitignore
+├── requirements-dev.txt
 └── README.md
 ```
 
-## Run locally
+## Dataset
+
+Use the public IBM Telco Customer Churn dataset. Place the CSV at:
+
+`data/WA_Fn-UseC_-Telco-Customer-Churn.csv`
+
+The expected target column is `Churn`, with values `Yes` and `No`. Do not commit customer data or data you are not licensed to share.
+
+## Setup — Windows
+
+Run these commands from the project folder:
 
 ```bash
 python -m venv .venv
-# Windows: .venv\\Scripts\\activate
-# macOS/Linux: source .venv/bin/activate
+.venv\\Scripts\\activate
+python -m pip install --upgrade pip
 pip install -r requirements.txt
+pip install -r requirements-dev.txt
+```
+
+## Train and evaluate
+
+```bash
 python src/train.py --data data/WA_Fn-UseC_-Telco-Customer-Churn.csv
 ```
 
-The script reports evaluation metrics on a held-out test set. It does not claim a specific accuracy in advance; performance depends on the dataset and split.
+The script writes `reports/churn_model.joblib`, `reports/metrics.json`, and `reports/confusion_matrix.png`. These are generated locally and intentionally excluded from Git.
+
+## Run tests
+
+```bash
+python -m pytest tests/
+```
+
+Tests use a small synthetic dataset and do not require downloading the IBM dataset. They have been added but still need to be executed in a local environment.
 
 ## Tech stack
 
-- Python
-- pandas and NumPy
-- scikit-learn
-- Matplotlib
+Python, pandas, scikit-learn, Matplotlib, joblib, pytest.
 
 ## Responsible use
 
-Churn scores are decision-support signals, not certainty about an individual customer. Check for data leakage, monitor performance across customer groups, and use predictions to improve service rather than to unfairly restrict access.
-
-## Next improvements
-
-- Add exploratory data analysis and visualizations.
-- Compare Logistic Regression, Random Forest, and Gradient Boosting.
-- Tune the decision threshold around retention-team capacity.
-- Add cross-validation, calibration, and a model card.
-- Build a small Streamlit dashboard after validating the model.
+Churn probabilities are estimates, not certainty about individual customers. Review precision and recall together, check for data leakage and group-level performance differences, and use predictions to improve customer support—not to unfairly restrict service. This project is a portfolio prototype, not a production decision system.
