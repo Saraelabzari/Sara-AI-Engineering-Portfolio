@@ -1,54 +1,53 @@
-"""FAQ retrieval chatbot demo using Streamlit and TF-IDF."""
-from __future__ import annotations
-
-import json
+"""Streamlit interface for a grounded FAQ customer-support chatbot."""
 from pathlib import Path
 
 import streamlit as st
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
+
+from src.retrieval import FAQRetriever, load_knowledge_base
 
 BASE_DIR = Path(__file__).resolve().parent
 KB_PATH = BASE_DIR / "knowledge_base.json"
-FALLBACK = (
-    "I couldn't find a reliable answer in the current FAQ. "
-    "Please contact the official support team for help."
-)
 
 
 @st.cache_data
-def load_knowledge_base(path: str = str(KB_PATH)) -> list[dict[str, str]]:
-    with open(path, "r", encoding="utf-8") as handle:
-        entries = json.load(handle)
-    if not isinstance(entries, list) or not entries:
-        raise ValueError("Knowledge base must be a non-empty list.")
-    for entry in entries:
-        if not entry.get("question") or not entry.get("answer"):
-            raise ValueError("Each FAQ entry must have a question and an answer.")
-    return entries
+def cached_knowledge_base(path: str) -> list[dict[str, str]]:
+    return load_knowledge_base(path)
 
 
-def retrieve_answer(query: str, entries: list[dict[str, str]], threshold: float = 0.18):
-    """Return best FAQ answer and similarity score, or fallback if below threshold."""
-    query = query.strip()
-    if not query:
-        return FALLBACK, None, None
-    questions = [entry["question"] for entry in entries]
-    vectorizer = TfidfVectorizer(stop_words="english", ngram_range=(1, 2))
-    matrix = vectorizer.fit_transform(questions + [query])
-    scores = cosine_similarity(matrix[-1], matrix[:-1]).ravel()
-    best_idx = int(scores.argmax())
-    best_score = float(scores[best_idx])
-    if best_score < threshold:
-        return FALLBACK, None, best_score
-    return entries[best_idx]["answer"], entries[best_idx]["question"], best_score
+@st.cache_resource
+def cached_retriever(entries: list[dict[str, str]]) -> FAQRetriever:
+    return FAQRetriever(entries)
 
 
 def main() -> None:
     st.set_page_config(page_title="AI Customer Support Chatbot", page_icon="💬")
     st.title("AI Customer Support Chatbot")
-    st.caption("FAQ retrieval demo — replace the sample FAQs with verified company information.")
-    entries = load_knowledge_base()
+    st.caption(
+        "A local FAQ retrieval demo. Answers come from the configured knowledge base; "
+        "it does not generate or verify company policy."
+    )
+
+    with st.sidebar:
+        st.subheader("Settings")
+        threshold = st.slider(
+            "Answer confidence threshold",
+            min_value=0.0,
+            max_value=1.0,
+            value=0.18,
+            step=0.01,
+            help="Raise this value to make the bot more cautious about answering.",
+        )
+        show_score = st.checkbox("Show retrieval details", value=False)
+        if st.button("Clear conversation"):
+            st.session_state.messages = []
+            st.rerun()
+
+    try:
+        entries = cached_knowledge_base(str(KB_PATH))
+        retriever = cached_retriever(entries)
+    except (OSError, ValueError) as exc:
+        st.error(f"Could not load the FAQ knowledge base: {exc}")
+        st.stop()
 
     if "messages" not in st.session_state:
         st.session_state.messages = []
@@ -58,21 +57,33 @@ def main() -> None:
             st.markdown(message["content"])
             if message.get("source"):
                 st.caption(f"FAQ source: {message['source']}")
+            if show_score and message.get("score") is not None:
+                st.caption(f"Similarity score: {message['score']:.3f}")
 
-    prompt = st.chat_input("Ask a question about orders, refunds, or account help…")
+    prompt = st.chat_input("Ask about passwords, orders, refunds, or account help…")
     if prompt:
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.markdown(prompt)
 
-        answer, source, score = retrieve_answer(prompt, entries)
+        result = retriever.answer(prompt, threshold=threshold)
         with st.chat_message("assistant"):
-            st.markdown(answer)
-            if source:
-                st.caption(f"FAQ source: {source} · similarity {score:.2f}")
-        st.session_state.messages.append(
-            {"role": "assistant", "content": answer, "source": source}
-        )
+            st.markdown(result["answer"])
+            if result["source"]:
+                st.caption(
+                    f"FAQ source: {result['source']} · {result['category']}"
+                )
+            if show_score and result["score"] is not None:
+                st.caption(f"Similarity score: {result['score']:.3f}")
+            if not result["matched"]:
+                st.info("This response is a fallback because no FAQ passed the threshold.")
+
+        st.session_state.messages.append({
+            "role": "assistant",
+            "content": result["answer"],
+            "source": result["source"],
+            "score": result["score"],
+        })
 
 
 if __name__ == "__main__":
