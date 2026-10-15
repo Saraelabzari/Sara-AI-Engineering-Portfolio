@@ -34,6 +34,11 @@ A speech-emotion-recognition starter pipeline that extracts MFCC acoustic featur
 - **Technologies:** Python, Librosa, Scikit-learn, Matplotlib
 - **Project folder:** [emotion-detection-from-voice](projects/emotion-detection-from-voice/)
 
+### 07. Ultrasound Image Classification — PCOS Research
+A transfer-learning starter using ResNet-18 for experiments on labeled ultrasound images, with a confusion matrix and classification report. This is research code, not a validated diagnostic tool.
+- **Technologies:** Python, PyTorch, Torchvision, Scikit-learn
+- **Project folder:** [ultrasound-pcos-detection](projects/ultrasound-pcos-detection/)
+
 ## About this portfolio
 
 The goal is to demonstrate practical problem-solving, reproducible experiments, clear documentation, and responsible use of AI. Projects are works in progress; results and limitations should be reviewed in each project's documentation.
