@@ -14,7 +14,7 @@ This repository is a work in progress. Each project folder contains its own sour
 | 04 | [Face Detection Home Security System](projects/face-detection-home-security/) | Local webcam face detection | OpenCV, Python |
 | 05 | [Fraud Detection for Online Payments](projects/fraud-detection-online-payments/) | Imbalanced classification and fraud metrics | scikit-learn, Pandas, Matplotlib |
 | 06 | [Emotion Detection from Voice](projects/emotion-detection-from-voice/) | MFCC feature extraction and speech-emotion classification | Librosa, scikit-learn |
-| 07 | [Ultrasound Image Classification — PCOS Research](projects/ultrasound-pcos-detection/) | Image classification transfer-learning prototype | PyTorch, Torchvision |
+| 07 | [PCOS Prediction & Ultrasound Classification Research](projects/ultrasound-pcos-detection/) | Clinical-data ML comparison (Logistic Regression, Random Forest, XGBoost) plus an ultrasound image-classification prototype | Pandas, scikit-learn, XGBoost, PyTorch |
 | 08 | [AI Chatbot for Customer Support](projects/ai-customer-support-chatbot/) | FAQ retrieval with confidence-based fallback | Streamlit, TF-IDF, scikit-learn |
 | 09 | [ID Document Recognition System](projects/id-document-recognition/) | Image preprocessing and OCR text extraction | OpenCV, Tesseract, Streamlit |
 | 10 | [Product Recommendation Engine](projects/product-recommendation-engine/) | Content-based product similarity ranking | Pandas, TF-IDF, scikit-learn |
