@@ -69,6 +69,11 @@ A local OpenCV webcam prototype that detects face-like regions, draws bounding b
 - **Technologies:** Python, OpenCV, NumPy, pytest
 - **Project folder:** [face-detection-home-security](projects/face-detection-home-security/)
 
+### 05. Fraud Detection for Online Payments
+A class-imbalance-aware fraud detection pipeline with a majority-class baseline, Random Forest, precision-recall analysis, model export, and unit tests.
+- **Technologies:** Python, pandas, scikit-learn, Matplotlib
+- **Project folder:** [fraud-detection-online-payments](projects/fraud-detection-online-payments/)
+
 ## About this portfolio
 
 The goal is to demonstrate practical problem-solving, reproducible experiments, clear documentation, and responsible use of AI. Projects are works in progress; results and limitations should be reviewed in each project's documentation.
