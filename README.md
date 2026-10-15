@@ -14,6 +14,11 @@ A Streamlit application that transcribes multilingual audio using Whisper and ge
 - **Technologies:** Python, Whisper, Hugging Face Transformers, PyTorch, Streamlit
 - **Project folder:** [multilingual-speech-to-text-summarizer](projects/multilingual-speech-to-text-summarizer/)
 
+### 03. Customer Churn Prediction
+A reproducible classification pipeline for identifying customers at risk of leaving a subscription service. The project includes preprocessing, a Logistic Regression baseline, evaluation metrics, and a confusion-matrix output.
+- **Technologies:** Python, Pandas, Scikit-learn, Matplotlib
+- **Project folder:** [customer-churn-prediction](projects/customer-churn-prediction/)
+
 ## About this portfolio
 
 The goal is to demonstrate practical problem-solving, reproducible experiments, clear documentation, and responsible use of AI. Projects are works in progress; results and limitations should be reviewed in each project's documentation.
