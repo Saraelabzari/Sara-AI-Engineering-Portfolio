@@ -1,36 +1,57 @@
 # Machine Learning Model Comparison Dashboard
 
-An interactive Streamlit dashboard that trains several classification models on a selected dataset and compares their performance using consistent train/test splits and evaluation metrics.
+An interactive Streamlit application for comparing three baseline classification algorithms on the same held-out split. It supports numeric and categorical features and displays macro-averaged metrics and a confusion matrix.
 
-> **Status:** Starter project. It uses a bundled, synthetic demonstration dataset by default. Results are educational and should not be interpreted as production model benchmarks.
+> **Status:** Portfolio prototype. The bundled dataset is synthetic and intentionally small. Its scores are illustrative only, not meaningful evidence of model quality on real business data.
 
 ## Features
 
-- Dataset preview and target-column selection
-- Numeric and categorical preprocessing with scikit-learn pipelines
-- Comparison of Logistic Regression, Random Forest, and Gradient Boosting
-- Accuracy, precision, recall, F1-score, and ROC-AUC where applicable
-- Confusion matrix and metric comparison chart
-- Reproducible train/test split
+- Upload a CSV or use the included synthetic sample
+- Select the target column
+- Validate class labels and feature columns
+- Preprocess numeric and categorical data inside each scikit-learn pipeline
+- Compare Logistic Regression, Random Forest, and Gradient Boosting
+- Display accuracy, macro precision, macro recall, macro F1, and ROC-AUC when supported
+- Inspect class distribution and a model-specific confusion matrix
+- Reusable evaluation functions and unit tests
 
 ## Run locally
 
+Python 3.10+ is recommended.
+
 ```bash
 python -m venv .venv
-# Windows: .venv\\Scripts\\activate
+# Windows PowerShell: .venv\Scripts\Activate.ps1
 # macOS/Linux: source .venv/bin/activate
 pip install -r requirements.txt
 streamlit run app.py
 ```
 
-## Methodology notes
+## Run tests
 
-- The target column should be categorical or binary for this starter dashboard.
-- The dashboard uses a stratified split when possible.
-- Preprocessing is fitted inside each model pipeline to reduce data leakage.
-- Model metrics depend on dataset choice and class balance; review precision and recall in addition to accuracy.
-- For a rigorous comparison, use cross-validation, confidence intervals, tuned thresholds, and a held-out final test set.
+```bash
+pip install -r requirements-dev.txt
+python -m pytest tests/ -q
+```
 
-## Next improvements
+The tests are committed but have not been executed in this environment. Run them locally before presenting the project as verified.
 
-Add regression support, cross-validation, hyperparameter tuning, experiment export, and a model card with intended use and limitations.
+## Expected CSV format
+
+- One row per observation
+- One target column with at least two classes
+- At least one feature column
+- Numeric and categorical features are supported
+- Missing target rows are excluded; missing feature values are imputed within the training pipeline
+
+Avoid target leakage: do not include columns that encode the answer or information unavailable at prediction time.
+
+## Methodology and limitations
+
+- Uses a stratified train/test split with a fixed random seed.
+- Preprocessing is fitted only on training data through scikit-learn pipelines.
+- Macro metrics give each class equal weight, which can be useful when classes are imbalanced.
+- ROC-AUC is shown only when it can be calculated from model probability estimates.
+- The dashboard uses default hyperparameters and one split; results can vary with data and random seed.
+
+For stronger evidence, add cross-validation, confidence intervals, threshold tuning, calibration, and a final untouched test set. Compare models on a task-appropriate metric rather than choosing the highest accuracy by default.
