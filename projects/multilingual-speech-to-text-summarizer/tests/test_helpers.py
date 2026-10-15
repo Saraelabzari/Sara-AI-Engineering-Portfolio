@@ -1,4 +1,5 @@
-from app import timestamp, make_transcript, split_text
+"""Compatibility tests for the public helper functions."""
+from src.audio_utils import make_transcript, split_text, timestamp
 
 
 def test_timestamp():
