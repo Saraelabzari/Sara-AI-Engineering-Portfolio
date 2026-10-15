@@ -1,45 +1,69 @@
 # Emotion Detection from Voice
 
-A speech-emotion-recognition starter project that extracts acoustic features from audio and trains a classifier to predict emotion labels from a labeled speech dataset.
+A speech-emotion-recognition research prototype that extracts MFCC statistics from labeled audio and trains a Random Forest baseline to predict the labels in a dataset.
 
-> **Status:** Starter implementation. It has not yet been trained or evaluated on a dataset, so no accuracy or performance claim is made.
+> **Status:** The implementation and tests have been added. It has not yet been trained on a full labeled dataset, so no performance result is claimed.
 
-## Objectives
+## Features
 
-- Load labeled speech recordings.
-- Extract MFCC-based acoustic features.
-- Train a baseline classifier.
-- Evaluate with macro F1-score, a classification report, and a confusion matrix.
-- Consider speaker-independent splits to reduce speaker leakage.
+- CSV manifest validation for audio paths and emotion labels
+- Relative and absolute audio path support
+- MFCC mean and standard-deviation feature extraction
+- Imputation and a class-weighted Random Forest classifier
+- Stratified train/test split and macro F1/classification report
+- Confusion matrix and saved model
+- Unit tests using a generated tone and temporary manifest files
 
-## Dataset
+## Dataset format
 
-This project expects a folder of audio files and a CSV manifest with columns:
+Create a local CSV at `data/labels.csv` with these columns:
 
-- `path`: path to an audio file, relative to the manifest directory or absolute
-- `label`: emotion class, such as happy, sad, angry, neutral, or fearful
+```csv
+path,label
+audio/sample_001.wav,happy
+audio/sample_002.wav,sad
+audio/sample_003.wav,neutral
+audio/sample_004.wav,angry
+```
 
-Use a dataset whose terms of use permit your intended use. For example, the RAVDESS emotional speech dataset is commonly used for academic experimentation. Download it from its official source and create a manifest locally at `data/labels.csv`. Do not commit audio recordings unless the dataset licence explicitly permits redistribution.
+Relative audio paths are resolved from the manifest directory. Use a dataset whose licence allows your intended use; RAVDESS is one commonly used academic dataset. Do not upload recordings unless redistribution is permitted.
 
-## Setup and run
+## Setup — Windows
 
 ```bash
 python -m venv .venv
-# Windows: .venv\\Scripts\\activate
-# macOS/Linux: source .venv/bin/activate
+.venv\\Scripts\\activate
+python -m pip install --upgrade pip
 pip install -r requirements.txt
+pip install -r requirements-dev.txt
+```
+
+## Train
+
+```bash
 python src/train.py --manifest data/labels.csv
 ```
 
-## Method
+Optional settings:
 
-1. Read each audio file.
-2. Resample to a consistent sampling rate.
-3. Extract MFCC statistics from the audio.
-4. Encode the emotion labels.
-5. Split the dataset into training and test subsets.
-6. Train a Random Forest baseline and report macro F1-score and per-class metrics.
+```bash
+python src/train.py --manifest data/labels.csv --trees 100
+```
+
+Generated files are written to `reports/confusion_matrix.png` and `models/emotion_classifier.joblib`; generated outputs are excluded from Git.
+
+## Tests
+
+```bash
+python -m pytest tests/
+```
+
+The tests use a generated audio tone and do not need a downloaded emotion dataset. They have been added but still need to be run locally.
+
+## Tech stack
+
+Python, librosa, NumPy, pandas, scikit-learn, Matplotlib, SoundFile, pytest.
 
 ## Limitations and responsible use
 
-Vocal emotion is subjective and culturally dependent. Audio models can be inaccurate across languages, accents, recording conditions, and demographic groups. Do not use predicted emotion as a diagnosis or as the sole basis for employment, education, policing, or other consequential decisions. The model predicts dataset labels, not a person's true internal state.
+Vocal emotion is subjective, culturally dependent, and not a reliable direct measurement of a person's internal state. Predictions may vary across languages, accents, speakers, microphones, and contexts. Do not use the output as a diagnosis or as the sole basis for employment, education, policing, or other consequential decisions.
