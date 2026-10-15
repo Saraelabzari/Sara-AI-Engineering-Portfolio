@@ -1,10 +1,7 @@
-__pycache__/
-*.py[cod]
 .venv/
 venv/
+__pycache__/
+*.py[cod]
 .env
 .DS_Store
-*.mp4
-*.avi
-*.mov
 captures/
