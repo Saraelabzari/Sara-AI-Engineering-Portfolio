@@ -1,18 +1,22 @@
 [
   {
     "question": "How can I reset my password?",
-    "answer": "Use the password reset link on the sign-in page. If you no longer have access to your registered email, contact the support team to verify your account."
+    "answer": "Use the password reset link on the sign-in page. If you no longer have access to your registered email, contact the support team to verify your account.",
+    "category": "Account"
   },
   {
     "question": "How do I contact customer support?",
-    "answer": "Please contact the customer support team through the official support channel listed on the company website. Add the correct company-specific contact details before publishing this chatbot."
+    "answer": "Please contact the customer support team through the official support channel listed on the company website. Add the correct company-specific contact details before publishing this chatbot.",
+    "category": "Support"
   },
   {
     "question": "How can I check my order status?",
-    "answer": "Sign in to your account and open the Orders section to check the latest order status. For account-specific help, contact support through the official channel."
+    "answer": "Sign in to your account and open the Orders section to check the latest order status. For account-specific help, contact support through the official channel.",
+    "category": "Orders"
   },
   {
     "question": "How do I request a refund?",
-    "answer": "Review the company's official refund policy and submit a request through its approved support channel. Replace this sample answer with the company's verified refund procedure."
+    "answer": "Review the company's official refund policy and submit a request through its approved support channel. Replace this sample answer with the company's verified refund procedure.",
+    "category": "Refunds"
   }
 ]
