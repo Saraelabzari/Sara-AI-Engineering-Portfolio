@@ -49,6 +49,11 @@ A local OCR prototype that preprocesses document images and extracts text with T
 - **Technologies:** Python, OpenCV, Tesseract OCR, Streamlit
 - **Project folder:** [id-document-recognition](projects/id-document-recognition/)
 
+### 10. Product Recommendation Engine
+A Streamlit demo that recommends similar products using TF-IDF features and cosine similarity over product titles, categories, and descriptions.
+- **Technologies:** Python, Pandas, Scikit-learn, Streamlit
+- **Project folder:** [product-recommendation-engine](projects/product-recommendation-engine/)
+
 ## About this portfolio
 
 The goal is to demonstrate practical problem-solving, reproducible experiments, clear documentation, and responsible use of AI. Projects are works in progress; results and limitations should be reviewed in each project's documentation.
