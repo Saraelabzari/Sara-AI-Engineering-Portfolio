@@ -64,6 +64,11 @@ A local voice-assistant prototype that recognizes spoken commands, responds with
 - **Technologies:** Python, SpeechRecognition, pyttsx3
 - **Project folder:** [smart-home-voice-assistant](projects/smart-home-voice-assistant/)
 
+### 04. Face Detection Home Security
+A local OpenCV webcam prototype that detects face-like regions, draws bounding boxes, and includes reusable functions and unit tests. It does not identify people or control real locks.
+- **Technologies:** Python, OpenCV, NumPy, pytest
+- **Project folder:** [face-detection-home-security](projects/face-detection-home-security/)
+
 ## About this portfolio
 
 The goal is to demonstrate practical problem-solving, reproducible experiments, clear documentation, and responsible use of AI. Projects are works in progress; results and limitations should be reviewed in each project's documentation.
