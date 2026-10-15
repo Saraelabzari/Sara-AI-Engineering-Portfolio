@@ -54,6 +54,11 @@ A Streamlit demo that recommends similar products using TF-IDF features and cosi
 - **Technologies:** Python, Pandas, Scikit-learn, Streamlit
 - **Project folder:** [product-recommendation-engine](projects/product-recommendation-engine/)
 
+### 11. Machine Learning Model Comparison Dashboard
+An interactive Streamlit app for comparing Logistic Regression, Random Forest, and Gradient Boosting with consistent preprocessing and classification metrics.
+- **Technologies:** Python, Pandas, Scikit-learn, Streamlit, Matplotlib
+- **Project folder:** [ml-model-comparison-dashboard](projects/ml-model-comparison-dashboard/)
+
 ## About this portfolio
 
 The goal is to demonstrate practical problem-solving, reproducible experiments, clear documentation, and responsible use of AI. Projects are works in progress; results and limitations should be reviewed in each project's documentation.
