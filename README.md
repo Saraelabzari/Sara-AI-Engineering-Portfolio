@@ -81,6 +81,8 @@ streamlit run app.py        # if the project has a dashboard
 
 AI Engineer focused on **industrial AI**, which means bringing machine learning into plants, energy and infrastructure. I also build NLP, speech and computer-vision applications end to end: data, model, evaluation, app and tests.
 
+🌐 I also designed and developed the [ASEC Automation website](https://www.asecautomation.com): React + TypeScript, English & Arabic, and a careers platform ([code](https://github.com/Asec-automation/asec-website)).
+
 📫 [LinkedIn](https://www.linkedin.com/in/sarah-elabzari-64b214231)
 
 <sub>Portfolio projects are demonstrations and prototypes, not production-certified systems. Scores are only claimed where the dataset and evaluation are documented and reproducible.</sub>
