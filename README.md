@@ -4,14 +4,14 @@
 
 <p align="center">
   <a href="https://github.com/Saraelabzari/Sara-AI-Engineering-Portfolio/actions/workflows/tests.yml"><img src="https://github.com/Saraelabzari/Sara-AI-Engineering-Portfolio/actions/workflows/tests.yml/badge.svg" alt="tests"></a>
-  <img src="https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white" alt="Python 3.10+">
-  <img src="https://img.shields.io/badge/scikit--learn-F7931E?logo=scikitlearn&logoColor=white" alt="scikit-learn">
-  <img src="https://img.shields.io/badge/PyTorch-EE4C2C?logo=pytorch&logoColor=white" alt="PyTorch">
-  <img src="https://img.shields.io/badge/Streamlit-FF4B4B?logo=streamlit&logoColor=white" alt="Streamlit">
-  <a href="https://www.linkedin.com/in/sarah-elabzari-64b214231"><img src="https://img.shields.io/badge/LinkedIn-Sara%20Elabzari-0A66C2?logo=linkedin&logoColor=white" alt="LinkedIn"></a>
+  <img src="https://img.shields.io/badge/python-3.10%2B-ff5fa8?logo=python&logoColor=white" alt="Python 3.10+">
+  <img src="https://img.shields.io/badge/scikit--learn-e84393?logo=scikitlearn&logoColor=white" alt="scikit-learn">
+  <img src="https://img.shields.io/badge/PyTorch-d6336c?logo=pytorch&logoColor=white" alt="PyTorch">
+  <img src="https://img.shields.io/badge/Streamlit-c2185b?logo=streamlit&logoColor=white" alt="Streamlit">
+  <a href="https://www.linkedin.com/in/sarah-elabzari-64b214231"><img src="https://img.shields.io/badge/LinkedIn-Sara%20Elabzari-ff79b0?logo=linkedin&logoColor=white" alt="LinkedIn"></a>
 </p>
 
-Applied AI projects across **industrial AI, machine learning, NLP and computer vision**. Each project is a self-contained Python package with its own README, requirements and an automated **pytest** suite. Wherever it applies, every model is measured against a simple baseline, so the results say how much the model actually adds.
+Applied AI projects across **industrial AI, machine learning, NLP and computer vision**. All 14 projects are self-contained Python packages each with its own README, requirements and an automated **pytest** suite. Wherever it applies, every model is measured against a simple baseline, so the results say how much the model actually adds.
 
 ---
 
@@ -21,7 +21,7 @@ Applied AI projects across **industrial AI, machine learning, NLP and computer v
 |---|---|---|
 | 🛠️ | **[Predictive Maintenance — RUL](projects/predictive-maintenance-rul/)** | Remaining-useful-life regression and failure-risk alerts from multi-sensor data. Train/test split by machine (no leakage), fleet dashboard. RUL MAE 4.2 cycles vs 36.8 for the baseline. |
 | ⚡ | **[Energy Load Forecasting](projects/energy-load-forecasting/)** | Hourly demand forecasting with lag, calendar and temperature features. Chronological evaluation that beats the seasonal-naive baseline (MAPE 2.2 % vs 2.9 %). |
-| 🏭 | **[AI Cement Plant Intelligence](projects/project-01-cement-plant-ai/)** | Process forecasting and event review on real cement-plant DCS sensor data. |
+| 💳 | **[Fraud Detection for Online Payments](projects/fraud-detection-online-payments/)** | Imbalanced classification with a class-weighted Random Forest vs. a majority baseline, evaluated with precision-recall. |
 | 🎙️ | **[Multilingual Speech-to-Text & Summarizer](projects/multilingual-speech-to-text-summarizer/)** | Whisper transcription plus Transformer summarization, with a Streamlit app. |
 
 ## 📂 All projects
@@ -31,7 +31,6 @@ Applied AI projects across **industrial AI, machine learning, NLP and computer v
 |---|---|---|
 | [Predictive Maintenance — RUL](projects/predictive-maintenance-rul/) | RUL regression and failure-risk classification | scikit-learn, pandas, Streamlit |
 | [Energy Load Forecasting](projects/energy-load-forecasting/) | Hourly grid-demand forecasting | Gradient boosting, pandas, Streamlit |
-| [AI Cement Plant Intelligence System](projects/project-01-cement-plant-ai/) | Industrial sensor analysis and process forecasting | Jupyter, pandas, scikit-learn |
 
 ### Machine learning & analytics
 | Project | Focus | Stack |
