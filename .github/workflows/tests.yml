@@ -1,0 +1,47 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: ${{ matrix.project }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - ai-customer-support-chatbot
+          - customer-churn-prediction
+          - energy-load-forecasting
+          - face-detection-home-security
+          - fraud-detection-online-payments
+          - id-document-recognition
+          - ml-model-comparison-dashboard
+          - predictive-maintenance-rul
+          - product-recommendation-engine
+          - smart-home-voice-assistant
+          - emotion-detection-from-voice
+          - image-classification-pipeline
+          - ultrasound-pcos-detection
+          - multilingual-speech-to-text-summarizer
+    defaults:
+      run:
+        working-directory: projects/${{ matrix.project }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: System packages
+        run: sudo apt-get update && sudo apt-get install -y portaudio19-dev libsndfile1 tesseract-ocr ffmpeg
+      - name: Install dependencies (CPU-only PyTorch)
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt --extra-index-url https://download.pytorch.org/whl/cpu
+      - name: Run tests
+        run: python -m pytest -q

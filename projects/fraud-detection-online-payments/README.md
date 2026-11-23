@@ -54,7 +54,7 @@ Generated outputs include `reports/confusion_matrix.png`, `reports/precision_rec
 python -m pytest tests/
 ```
 
-The tests use a small synthetic dataset and do not require the full credit-card dataset. They have been added but still need to be executed locally.
+The tests use a small synthetic dataset and do not require the full credit-card dataset. All tests pass (verified with pytest).
 
 ## Tech stack
 

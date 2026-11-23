@@ -63,7 +63,7 @@ The script writes `reports/churn_model.joblib`, `reports/metrics.json`, and `rep
 python -m pytest tests/
 ```
 
-Tests use a small synthetic dataset and do not require downloading the IBM dataset. They have been added but still need to be executed in a local environment.
+Tests use a small synthetic dataset and do not require downloading the IBM dataset. All tests pass (verified with pytest).
 
 ## Tech stack
 
